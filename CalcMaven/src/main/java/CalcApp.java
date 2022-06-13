@@ -1,6 +1,10 @@
 import io.confluent.rest.Application;
 import io.confluent.rest.entities.ErrorMessage;
+import java.io.InputStream;
 import java.util.HashMap;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Configurable;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -13,6 +17,8 @@ import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 public class CalcApp extends Application<CalcConfig>{
 
@@ -53,6 +59,7 @@ public class CalcApp extends Application<CalcConfig>{
     };
 
     configurable.register(mapper);
+    configurable.register(new SwaggerResource());
   }
 
   @Override
@@ -96,7 +103,6 @@ public class CalcApp extends Application<CalcConfig>{
       return null;
     }
   }
-
 
 
 }

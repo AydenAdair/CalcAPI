@@ -1,0 +1,127 @@
+swagger: "2.0"
+info:
+  description: |
+    Ayden's first ticket at Confluent to create a calculator API
+  version: "v1"
+  title: "AydenCalculator"
+
+tags:
+  - name: Calculator API
+    description: Has five operations listed below
+
+servers:
+  - url: http://localhost:8080/calc
+
+paths:
+  /add:
+    get:
+      tags:
+        - Add two numbers
+      summary: |
+        Adds two numbers
+      description: Given two integers, it adds them.
+      operationId: add
+      parameters:
+        - name: value1
+          in: query
+          required: true
+          description: First integer
+          type: integer
+        - name: value2
+          in: query
+          required: true
+          description: Second integer
+          type: integer
+      responses:
+        '200':
+          description: authenticated
+        '404':
+          description: Invalid input. Expecting 32-bit integers.
+          
+  /subtract:  
+    get:
+      tags:
+        - Subtracts two numbers
+      summary: |
+        Subtracts two numbers
+      description: Given two integers, it subtracts them.
+      operationId: subtract
+      parameters:
+        - name: value1
+          in: query
+          required: true
+          description: First integer
+          type: integer
+        - name: value2
+          in: query
+          required: true
+          description: Second integer
+          type: integer
+      responses:
+        '200':
+          description: authenticated
+        '404':
+          description: Invalid input. Expecting 32-bit integers.
+          
+  /divide:  
+    get:
+      tags:
+        - Divides two numbers
+      summary: |
+        Divides two numbers 
+      description: Given two numbers it divides them.
+      operationId: divide
+      parameters:
+        - name: value1
+          in: query
+          required: true
+          description: First integer
+          type: integer
+        - name: value2
+          in: query
+          required: true
+          description: Second integer
+          type: integer
+      responses:
+        '200':
+          description: authenticated
+        '404':
+          description: Invalid input. Expecting 32-bit integers.
+          
+  /multiply:  
+    get:
+      tags:
+        - Multiplies two numbers
+      summary: |
+        Multiplies two numbers together
+      description: Given two numbers it multiplies them.
+      operationId: multiply
+      parameters:
+        - name: value1
+          in: query
+          required: true
+          description: First integer
+          type: integer
+        - name: value2
+          in: query
+          required: true
+          description: Second integer
+          type: integer
+      responses:
+        '200':
+          description: authenticated
+        '404':
+          description: Invalid input. Expecting 32-bit integers.
+          
+  /audit:  
+    get:
+      tags:
+        - Get audit log
+      summary: |
+        Gets audit log of calculator operations
+      operationId: audit
+      responses:
+        '200':
+          description: authenticated
+  
+  
