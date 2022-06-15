@@ -9,9 +9,9 @@ tags:
   - name: Calculator API
     description: Has five operations listed below
 
-servers:
-  - url: http://localhost:8080/calc
-
+host: "localhost:8080/calc"
+schemes:
+  - "http"
 paths:
   /add:
     get:

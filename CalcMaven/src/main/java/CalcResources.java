@@ -45,7 +45,7 @@ public class CalcResources {
 
   @GET
   @Path("multiply")
-  public int multiple(@QueryParam("value1") int value1, @QueryParam("value2") int value2) {
+  public int multiply(@QueryParam("value1") int value1, @QueryParam("value2") int value2) {
     auditLog.add(new MathProblem("multiply", value1, value2, (value1 * value2)));
     return value1 * value2;
   }

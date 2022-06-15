@@ -10,10 +10,10 @@ import javax.ws.rs.core.Response;
 public class SwaggerResource {
 
   @GET
-  @Path("{path:.*")
+  @Path("{path:.*}")
   public Response staticResources(@PathParam("path") final String path) {
 
-    final InputStream resource = this.getClass().getResourceAsStream("/WEB-INF/openapi" + path);
+    final InputStream resource = this.getClass().getResourceAsStream("/WEB-INF/openapi/" + path);
 
     return null == resource
         ? Response.status(NOT_FOUND).build()

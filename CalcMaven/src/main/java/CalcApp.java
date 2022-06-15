@@ -1,10 +1,6 @@
 import io.confluent.rest.Application;
 import io.confluent.rest.entities.ErrorMessage;
-import java.io.InputStream;
 import java.util.HashMap;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Configurable;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -17,8 +13,6 @@ import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 public class CalcApp extends Application<CalcConfig>{
 
@@ -34,10 +28,12 @@ public class CalcApp extends Application<CalcConfig>{
       props.put("authentication.method", "BASIC");
       CalcApp app = new CalcApp(new CalcConfig(props));
       app.start();
-      log.info("Server started and listening on port " + app.server.getURI());
+      log.info("Server started and listening on port 8080"); //<-- app.server.getURI() broke?
       app.join();
     } catch (Exception e){
       log.error("Server failure: " + e.getMessage());
+      System.out.println("Exception happened making server");
+      System.out.println(e.getMessage());
       System.exit(1);
       throw new RuntimeException(e);
     }
@@ -49,13 +45,11 @@ public class CalcApp extends Application<CalcConfig>{
     configurable.register(new CalcResources());
 
     ExceptionMapper<Exception> mapper = e -> {
-      e.printStackTrace();
 
       int badRequestStatusCode = Status.BAD_REQUEST.getStatusCode();
       return Response.status(badRequestStatusCode)
           .entity(new ErrorMessage(badRequestStatusCode, e.getMessage()))
           .build();
-
     };
 
     configurable.register(mapper);
@@ -103,6 +97,5 @@ public class CalcApp extends Application<CalcConfig>{
       return null;
     }
   }
-
 
 }
