@@ -28,12 +28,10 @@ public class CalcApp extends Application<CalcConfig>{
       props.put("authentication.method", "BASIC");
       CalcApp app = new CalcApp(new CalcConfig(props));
       app.start();
-      log.info("Server started and listening on port 8080"); //<-- app.server.getURI() broke?
+      log.info("Server started and listening on port " + app.server.getURI()); //<-- .getURI() vanished for part of 6/14/22, why/how?
       app.join();
     } catch (Exception e){
       log.error("Server failure: " + e.getMessage());
-      System.out.println("Exception happened making server");
-      System.out.println(e.getMessage());
       System.exit(1);
       throw new RuntimeException(e);
     }

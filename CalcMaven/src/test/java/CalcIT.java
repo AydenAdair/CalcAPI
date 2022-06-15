@@ -2,15 +2,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
+import okhttp3.Credentials;
+import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-
 
 @Test
 public class CalcIT {
@@ -30,12 +31,24 @@ public class CalcIT {
 
     thread.start();
 
+    String authToken = Credentials.basic("ketchup", "mustard");
+    //create interceptor
+    Interceptor headerAuthInterceptor = new Interceptor() {
+      @Override
+      public Response intercept(Chain chain) throws IOException {
+        okhttp3.Request request = chain.request();
+        Headers headers = request.headers().newBuilder().add("Authorization", authToken).build();
+        request = request.newBuilder().headers(headers).build();
+        return chain.proceed(request);
+      }
+    };
+
     URL baseUrl = new URL("http://localhost:8080");
 
     Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(JacksonConverterFactory.create())
-        .client(new OkHttpClient().newBuilder().build())
+        .client(new OkHttpClient().newBuilder().addInterceptor(headerAuthInterceptor).build())
         .build();
 
     client = retrofit.create(RetrofitClient.class);
@@ -47,9 +60,6 @@ public class CalcIT {
       try {
         if (client.testEasy().execute().code() == 200) {
           break;
-        }
-        else{
-          System.out.println(Objects.requireNonNull(client.testAdd(2, 2).execute().errorBody()).string());
         }
       } catch (Exception e) {
         //do nothing
@@ -76,7 +86,7 @@ public class CalcIT {
     //test floating point return
     assertEquals(0.5, client.testDiv(2,4).execute().body());
     //test division by zero. Code should return error404
-    //assertEquals(404, client.testDiv(4,0).execute().code());
+    assertEquals(400, client.testDiv(4,0).execute().code());
   }
 
   @Test
@@ -86,8 +96,8 @@ public class CalcIT {
 
   @Test
   public void testAudit() throws IOException {
-    //no permissions, should return 401 error "unauthorized"
-    assertEquals(401, client.testAudit().execute().code());
+    //permissions are attached through interceptor
+    assertEquals(200, client.testAudit().execute().code());
 
   }
 

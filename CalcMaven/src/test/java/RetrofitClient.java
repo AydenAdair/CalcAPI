@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -16,7 +17,7 @@ public interface RetrofitClient {
   Call<Integer> testMult(@Query("value1") int value1, @Query("value2") int value2);
 
   @GET("/calc/audit")
-  Call<Integer> testAudit();
+  Call<ArrayList> testAudit();
 
   @GET("/calc/easy")
   Call<Void> testEasy();
