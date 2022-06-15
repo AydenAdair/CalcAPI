@@ -44,13 +44,17 @@ public class CalcApp extends Application<CalcConfig>{
   public void setupResources(Configurable<?> configurable, CalcConfig calcConfig) {
     configurable.register(new CalcResources());
 
-    ExceptionMapper<Exception> mapper = e -> {
-
-      int badRequestStatusCode = Status.BAD_REQUEST.getStatusCode();
-      return Response.status(badRequestStatusCode)
-          .entity(new ErrorMessage(badRequestStatusCode, e.getMessage()))
-          .build();
+    ExceptionMapper<Exception> mapper = new ExceptionMapper<Exception>() { //<-- converting this to lambda expression breaks exception catching for division by zero
+      @Override
+      public Response toResponse(Exception e) {
+        int badRequestStatusCode = Status.BAD_REQUEST.getStatusCode();
+        return Response.status(badRequestStatusCode)
+            .entity(new ErrorMessage(badRequestStatusCode, e.getMessage()))
+            .build();
+      }
     };
+
+
 
     configurable.register(mapper);
     configurable.register(new SwaggerResource());

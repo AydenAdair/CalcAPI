@@ -89,13 +89,6 @@ public class CalcIT {
     //no permissions, should return 401 error "unauthorized"
     assertEquals(401, client.testAudit().execute().code());
 
-    /* this code below doesnt properly get user/pass passed in
-    String authToken = Credentials.basic("ketchup", "mustard");
-    System.out.print(client.testAudit().execute()
-        .headers().newBuilder()
-        .add("Authorization", authToken).build());
-
-     */
   }
 
 }
